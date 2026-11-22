@@ -1,0 +1,41 @@
+
+gameplay.png
+size: 4096, 4096
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+acorn
+  rotate: false
+  xy: 2, 1292
+  size: 1254, 1254
+  orig: 1254, 1254
+  offset: 0, 0
+  index: -1
+avatar
+  rotate: false
+  xy: 2, 36
+  size: 1254, 1254
+  orig: 1254, 1254
+  offset: 0, 0
+  index: -1
+background
+  rotate: false
+  xy: 2, 2548
+  size: 1585, 992
+  orig: 1585, 992
+  offset: 0, 0
+  index: -1
+bomb
+  rotate: false
+  xy: 1589, 2286
+  size: 1254, 1254
+  orig: 1254, 1254
+  offset: 0, 0
+  index: -1
+particle
+  rotate: false
+  xy: 2, 2
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1

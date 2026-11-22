@@ -210,3 +210,9 @@ tasks.withType(JavaExec.class).configureEach {
 if(enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
 }
+
+tasks.register('packAssets', JavaExec) {
+  mainClass.set('si.um.feri.emersic.lwjgl3.AssetPacker')
+  classpath = sourceSets.main.runtimeClasspath
+  workingDir = rootProject.projectDir
+}
