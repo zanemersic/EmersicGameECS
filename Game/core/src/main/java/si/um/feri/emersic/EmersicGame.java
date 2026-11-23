@@ -15,6 +15,10 @@ public class EmersicGame extends Game {
 
         assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
         assetManager.load(AssetDescriptors.FONT);
+        assetManager.load(AssetDescriptors.ACORN_EFFECT);
+        assetManager.load(AssetDescriptors.BOMB_EFFECT);
+        assetManager.load(AssetDescriptors.COLLECT_SOUND);
+        assetManager.load(AssetDescriptors.HURT_SOUND);
         assetManager.finishLoading();
 
         setScreen(new GameScreen(assetManager));

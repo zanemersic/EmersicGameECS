@@ -19,14 +19,26 @@ import si.um.feri.emersic.ecs.component.RotationComponent;
 import si.um.feri.emersic.ecs.component.TextureComponent;
 import si.um.feri.emersic.ecs.component.ZOrderComponent;
 import si.um.feri.emersic.ecs.component.DamageComponent;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import si.um.feri.emersic.ecs.component.ParticleComponent;
+import com.badlogic.gdx.audio.Sound;
+import si.um.feri.emersic.ecs.component.SoundComponent;
 
 public class EntityFactorySystem extends EntitySystem {
     private final PooledEngine engine;
     private final TextureAtlas atlas;
+    private final ParticleEffect acornEffect;
+    private final ParticleEffect bombEffect;
+    private final Sound collectSound;
+    private final Sound hurtSound;
 
     public EntityFactorySystem(PooledEngine engine, AssetManager assetManager) {
         this.engine = engine;
         this.atlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
+        this.acornEffect = assetManager.get(AssetDescriptors.ACORN_EFFECT);
+        this.bombEffect = assetManager.get(AssetDescriptors.BOMB_EFFECT);
+        this.collectSound = assetManager.get(AssetDescriptors.COLLECT_SOUND);
+        this.hurtSound = assetManager.get(AssetDescriptors.HURT_SOUND);
 
         setProcessing(false);
     }
@@ -152,5 +164,65 @@ public class EntityFactorySystem extends EntitySystem {
         bomb.add(rotation);
 
         engine.addEntity(bomb);
+    }
+
+    public void createAcornEffect(float x, float y) {
+        Entity entity = engine.createEntity();
+
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+
+        ParticleComponent particle = engine.createComponent(ParticleComponent.class);
+
+        position.x = x;
+        position.y = y;
+
+        particle.effect = new ParticleEffect(acornEffect);
+        particle.effect.start();
+
+        entity.add(position);
+        entity.add(particle);
+
+        engine.addEntity(entity);
+    }
+
+    public void createBombEffect(float x, float y) {
+        Entity entity = engine.createEntity();
+
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+
+        ParticleComponent particle = engine.createComponent(ParticleComponent.class);
+
+        position.x = x;
+        position.y = y;
+
+        particle.effect = new ParticleEffect(bombEffect);
+        particle.effect.start();
+
+        entity.add(position);
+        entity.add(particle);
+
+        engine.addEntity(entity);
+    }
+
+    public void createCollectSound() {
+        Entity entity = engine.createEntity();
+
+        SoundComponent soundData = engine.createComponent(SoundComponent.class);
+
+        soundData.sound = collectSound;
+
+        entity.add(soundData);
+        engine.addEntity(entity);
+    }
+
+    public void createHurtSound() {
+        Entity entity = engine.createEntity();
+
+        SoundComponent soundData = engine.createComponent(SoundComponent.class);
+
+        soundData.sound = hurtSound;
+
+        entity.add(soundData);
+        engine.addEntity(entity);
     }
 }

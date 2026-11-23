@@ -16,10 +16,12 @@ public class CollisionSystem extends EntitySystem {
     private final Family acornFamily = Family.all(CollectibleComponent.class, PositionComponent.class, DimensionComponent.class).get();
     private final Family bombFamily = Family.all(DamageComponent.class, PositionComponent.class, DimensionComponent.class).get();
 
+    private final EntityFactorySystem factory;
 
-    public CollisionSystem(GameStateComponent gameState) {
+    public CollisionSystem(GameStateComponent gameState, EntityFactorySystem factory) {
         super(20);
         this.gameState = gameState;
+        this.factory = factory;
     }
 
     @Override
@@ -32,8 +34,14 @@ public class CollisionSystem extends EntitySystem {
             for (Entity acorn : getEngine().getEntitiesFor(acornFamily)) {
                 if (overlaps(player, acorn)) {
                     CollectibleComponent collectible = acorn.getComponent(CollectibleComponent.class);
+                    PositionComponent position = acorn.getComponent(PositionComponent.class);
+                    DimensionComponent dimension = acorn.getComponent(DimensionComponent.class);
 
                     gameState.score += collectible.points;
+
+                    factory.createCollectSound();
+                    factory.createAcornEffect(position.x + dimension.width / 2f, position.y + dimension.height / 2f);
+
                     getEngine().removeEntity(acorn);
                 }
             }
@@ -45,6 +53,13 @@ public class CollisionSystem extends EntitySystem {
                     DamageComponent damage = bomb.getComponent(DamageComponent.class);
 
                     playerData.health -= damage.damage;
+
+                    PositionComponent position = bomb.getComponent(PositionComponent.class);
+                    DimensionComponent dimension = bomb.getComponent(DimensionComponent.class);
+
+                    factory.createHurtSound();
+                    factory.createBombEffect(position.x + dimension.width / 2f, position.y + dimension.height / 2f);
+
                     getEngine().removeEntity(bomb);
 
                     if (playerData.health <= 0) {

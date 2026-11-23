@@ -1,13 +1,13 @@
 bombSparks
 - Delay -
 active: false
-- Duration - 
+- Duration -
 lowMin: 1000.0
 lowMax: 1000.0
-- Count - 
+- Count -
 min: 0
 max: 100
-- Emission - 
+- Emission -
 lowMin: 0.0
 lowMax: 0.0
 highMin: 40.0
@@ -17,7 +17,7 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
-- Life - 
+- Life -
 lowMin: 300.0
 lowMax: 300.0
 highMin: 600.0
@@ -28,16 +28,16 @@ scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
 independent: false
-- Life Offset - 
+- Life Offset -
 active: false
 independent: false
-- X Offset - 
+- X Offset -
 active: false
-- Y Offset - 
+- Y Offset -
 active: false
-- Spawn Shape - 
+- Spawn Shape -
 shape: point
-- Spawn Width - 
+- Spawn Width -
 lowMin: 0.0
 lowMax: 0.0
 highMin: 0.0
@@ -47,7 +47,7 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
-- Spawn Height - 
+- Spawn Height -
 lowMin: 0.0
 lowMax: 0.0
 highMin: 0.0
@@ -57,7 +57,7 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
-- X Scale - 
+- X Scale -
 lowMin: 8.0
 lowMax: 8.0
 highMin: 14.0
@@ -67,9 +67,9 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
-- Y Scale - 
+- Y Scale -
 active: false
-- Velocity - 
+- Velocity -
 active: true
 lowMin: 40.0
 lowMax: 40.0
@@ -80,7 +80,7 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
-- Angle - 
+- Angle -
 active: true
 lowMin: 0.0
 lowMax: 0.0
@@ -91,13 +91,13 @@ scalingCount: 1
 scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
-- Rotation - 
+- Rotation -
 active: false
-- Wind - 
+- Wind -
 active: false
-- Gravity - 
+- Gravity -
 active: false
-- Tint - 
+- Tint -
 colorsCount: 6
 colors0: 1.0
 colors1: 0.5803922
@@ -108,7 +108,7 @@ colors5: 0.18431373
 timelineCount: 2
 timeline0: 0.0
 timeline1: 1.0
-- Transparency - 
+- Transparency -
 lowMin: 0.0
 lowMax: 0.0
 highMin: 1.0
@@ -120,9 +120,9 @@ scaling1: 0.0
 timelineCount: 2
 timeline0: 0.0
 timeline1: 1.0
-- Options - 
+- Options -
 attached: false
-continuous: true
+continuous: false
 aligned: false
 additive: true
 behind: false
