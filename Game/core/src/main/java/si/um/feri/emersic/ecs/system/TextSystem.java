@@ -11,6 +11,7 @@ import si.um.feri.emersic.ecs.component.GameStateComponent;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import si.um.feri.emersic.ecs.component.PlayerComponent;
+import com.badlogic.gdx.graphics.Color;
 
 public class TextSystem extends EntitySystem {
     private final SpriteBatch batch;
@@ -33,15 +34,18 @@ public class TextSystem extends EntitySystem {
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
         batch.begin();
+        font.setColor(Color.YELLOW);
         font.draw(batch, "Score: " + gameState.score, 15f, GameConfig.WORLD_HEIGHT - 15f);
 
         for (Entity player : getEngine().getEntitiesFor(playerFamily)) {
             PlayerComponent playerData = player.getComponent(PlayerComponent.class);
 
+            font.setColor(Color.GREEN);
             font.draw(batch, "Health: " + playerData.health, 15f, GameConfig.WORLD_HEIGHT - 40f);
         }
 
         if (gameState.gameOver) {
+            font.setColor(Color.RED);
             font.draw(batch, "GAME OVER", GameConfig.WORLD_WIDTH / 2f - 50f, GameConfig.WORLD_HEIGHT / 2f);
         }
 
