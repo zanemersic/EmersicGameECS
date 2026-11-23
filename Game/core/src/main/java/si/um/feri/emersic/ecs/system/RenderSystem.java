@@ -10,6 +10,7 @@ import si.um.feri.emersic.ecs.component.DimensionComponent;
 import si.um.feri.emersic.ecs.component.PositionComponent;
 import si.um.feri.emersic.ecs.component.RotationComponent;
 import si.um.feri.emersic.ecs.component.TextureComponent;
+import si.um.feri.emersic.ecs.component.ZOrderComponent;
 
 
 public class RenderSystem extends IteratingSystem {
@@ -20,9 +21,10 @@ public class RenderSystem extends IteratingSystem {
 
     private final SpriteBatch batch;
     private final Viewport viewport;
+    private int currentLayer;
 
     public RenderSystem(SpriteBatch batch, Viewport viewport) {
-        super(Family.all(PositionComponent.class, DimensionComponent.class, TextureComponent.class).get(), 100);
+        super(Family.all(PositionComponent.class, DimensionComponent.class, TextureComponent.class, ZOrderComponent.class).get(), 100);
 
         this.batch = batch;
         this.viewport = viewport;
@@ -34,7 +36,12 @@ public class RenderSystem extends IteratingSystem {
         batch.setProjectionMatrix(viewport.getCamera().combined);
 
         batch.begin();
-        super.update(deltaTime);
+
+        for (int layer = 0; layer <= 2; layer++) {
+            currentLayer = layer;
+            super.update(deltaTime);
+        }
+
         batch.end();
     }
 
@@ -44,6 +51,11 @@ public class RenderSystem extends IteratingSystem {
         DimensionComponent dimension = dimensionMapper.get(entity);
         TextureComponent texture = textureMapper.get(entity);
         RotationComponent rotation = rotationMapper.get(entity);
+        ZOrderComponent zOrder = entity.getComponent(ZOrderComponent.class);
+
+        if (zOrder.z != currentLayer) {
+            return;
+        }
 
         float angle;
 

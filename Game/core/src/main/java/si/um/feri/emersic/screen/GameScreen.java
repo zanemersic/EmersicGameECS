@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import si.um.feri.emersic.ecs.component.GameStateComponent;
+import si.um.feri.emersic.ecs.system.EntityFactorySystem;
+import si.um.feri.emersic.ecs.system.InputHandlerSystem;
 import si.um.feri.emersic.ecs.system.MovementSystem;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,17 +19,20 @@ import si.um.feri.emersic.config.GameConfig;
 import si.um.feri.emersic.ecs.component.DimensionComponent;
 import si.um.feri.emersic.ecs.component.PositionComponent;
 import si.um.feri.emersic.ecs.component.TextureComponent;
+import si.um.feri.emersic.ecs.system.PlayerBoundsSystem;
+import si.um.feri.emersic.ecs.system.PlayerControlSystem;
 import si.um.feri.emersic.ecs.system.RenderSystem;
+import com.badlogic.gdx.Gdx;
+import si.um.feri.emersic.input.RawInputHandler;
 
 public class GameScreen extends ScreenAdapter {
     private final PooledEngine engine = new PooledEngine();
     private final GameStateComponent gameState;
-    private final AssetManager assetManager;
     private final SpriteBatch batch = new SpriteBatch();
     private final Viewport viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+    private final RawInputHandler rawInputHandler;
 
     public GameScreen(AssetManager assetManager) {
-        this.assetManager = assetManager;
 
         Entity stateEntity = engine.createEntity();
         gameState = engine.createComponent(GameStateComponent.class);
@@ -35,33 +40,19 @@ public class GameScreen extends ScreenAdapter {
         stateEntity.add(gameState);
         engine.addEntity(stateEntity);
 
+        EntityFactorySystem factory = new EntityFactorySystem(engine, assetManager);
+        InputHandlerSystem inputHandler = new InputHandlerSystem(gameState);
+
+        engine.addSystem(factory);
+        engine.addSystem(new PlayerControlSystem(gameState));
+        engine.addSystem(inputHandler);
         engine.addSystem(new MovementSystem(gameState));
         engine.addSystem(new RenderSystem(batch, viewport));
-        createSquirell();
-    }
+        engine.addSystem(new PlayerBoundsSystem());
 
-    private void createSquirell() {
-        TextureAtlas atlas = assetManager.get(AssetDescriptors.GAMEPLAY_ATLAS);
-
-        Entity squirrel = engine.createEntity();
-
-        PositionComponent position = engine.createComponent(PositionComponent.class);
-        DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-        dimension.width = 64f;
-        dimension.height = 64f;
-
-        position.x = (GameConfig.WORLD_WIDTH - dimension.width) / 2f;
-        position.y = 20f;
-
-        texture.region = atlas.findRegion(RegionNames.SQUIRREL);
-
-        squirrel.add(position);
-        squirrel.add(dimension);
-        squirrel.add(texture);
-
-        engine.addEntity(squirrel);
+        factory.createBackground();
+        factory.createSquirell();
+        rawInputHandler = new RawInputHandler(inputHandler);
     }
 
     @Override
@@ -73,6 +64,20 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
+    }
+
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(rawInputHandler);
+    }
+
+    @Override
+    public void hide() {
+        rawInputHandler.reset();
+
+        if (Gdx.input.getInputProcessor() == rawInputHandler) {
+            Gdx.input.setInputProcessor(null);
+        }
     }
 
     @Override
