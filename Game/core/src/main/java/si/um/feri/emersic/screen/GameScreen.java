@@ -6,6 +6,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.utils.ScreenUtils;
 import si.um.feri.emersic.ecs.component.GameStateComponent;
 import si.um.feri.emersic.ecs.system.AcornSpawnSystem;
+import si.um.feri.emersic.ecs.system.BombSpawnSystem;
 import si.um.feri.emersic.ecs.system.CleanupSystem;
 import si.um.feri.emersic.ecs.system.CollisionSystem;
 import si.um.feri.emersic.ecs.system.EntityFactorySystem;
@@ -27,6 +28,7 @@ import si.um.feri.emersic.ecs.system.PlayerControlSystem;
 import si.um.feri.emersic.ecs.system.RenderSystem;
 import com.badlogic.gdx.Gdx;
 
+import si.um.feri.emersic.ecs.system.RotationSystem;
 import si.um.feri.emersic.ecs.system.TextSystem;
 import si.um.feri.emersic.input.RawInputHandler;
 
@@ -58,6 +60,8 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new AcornSpawnSystem(factory, gameState));
         engine.addSystem(new CollisionSystem(gameState));
         engine.addSystem(new TextSystem(batch, viewport, assetManager, gameState));
+        engine.addSystem(new RotationSystem(gameState));
+        engine.addSystem(new BombSpawnSystem(factory, gameState));
 
         factory.createBackground();
         factory.createSquirell();

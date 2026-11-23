@@ -8,11 +8,13 @@ import si.um.feri.emersic.ecs.component.PositionComponent;
 import com.badlogic.ashley.core.Family;
 import si.um.feri.emersic.ecs.component.PlayerComponent;
 import si.um.feri.emersic.ecs.component.CollectibleComponent;
+import si.um.feri.emersic.ecs.component.DamageComponent;
 
 public class CollisionSystem extends EntitySystem {
     private final GameStateComponent gameState;
     private final Family playerFamily = Family.all(PlayerComponent.class, PositionComponent.class, DimensionComponent.class).get();
     private final Family acornFamily = Family.all(CollectibleComponent.class, PositionComponent.class, DimensionComponent.class).get();
+    private final Family bombFamily = Family.all(DamageComponent.class, PositionComponent.class, DimensionComponent.class).get();
 
 
     public CollisionSystem(GameStateComponent gameState) {
@@ -29,11 +31,27 @@ public class CollisionSystem extends EntitySystem {
         for (Entity player : getEngine().getEntitiesFor(playerFamily)) {
             for (Entity acorn : getEngine().getEntitiesFor(acornFamily)) {
                 if (overlaps(player, acorn)) {
-                    CollectibleComponent collectible =
-                        acorn.getComponent(CollectibleComponent.class);
+                    CollectibleComponent collectible = acorn.getComponent(CollectibleComponent.class);
 
                     gameState.score += collectible.points;
                     getEngine().removeEntity(acorn);
+                }
+            }
+
+            for (Entity bomb : getEngine().getEntitiesFor(bombFamily)) {
+                if (overlaps(player, bomb)) {
+                    PlayerComponent playerData = player.getComponent(PlayerComponent.class);
+
+                    DamageComponent damage = bomb.getComponent(DamageComponent.class);
+
+                    playerData.health -= damage.damage;
+                    getEngine().removeEntity(bomb);
+
+                    if (playerData.health <= 0) {
+                        playerData.health = 0;
+                        gameState.gameOver = true;
+                        return;
+                    }
                 }
             }
         }

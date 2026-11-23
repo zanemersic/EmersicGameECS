@@ -7,10 +7,11 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import si.um.feri.emersic.ecs.component.CollectibleComponent;
 import si.um.feri.emersic.ecs.component.DimensionComponent;
 import si.um.feri.emersic.ecs.component.PositionComponent;
+import si.um.feri.emersic.ecs.component.DamageComponent;
 
 public class CleanupSystem extends IteratingSystem {
     public CleanupSystem() {
-        super(Family.all(PositionComponent.class, DimensionComponent.class, CollectibleComponent.class).get(), 30);
+        super(Family.all(PositionComponent.class, DimensionComponent.class).one(CollectibleComponent.class, DamageComponent.class).get(), 30);
     }
 
     @Override

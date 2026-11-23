@@ -15,8 +15,10 @@ import si.um.feri.emersic.ecs.component.InputComponent;
 import si.um.feri.emersic.ecs.component.MovementComponent;
 import si.um.feri.emersic.ecs.component.PlayerComponent;
 import si.um.feri.emersic.ecs.component.PositionComponent;
+import si.um.feri.emersic.ecs.component.RotationComponent;
 import si.um.feri.emersic.ecs.component.TextureComponent;
 import si.um.feri.emersic.ecs.component.ZOrderComponent;
+import si.um.feri.emersic.ecs.component.DamageComponent;
 
 public class EntityFactorySystem extends EntitySystem {
     private final PooledEngine engine;
@@ -116,5 +118,39 @@ public class EntityFactorySystem extends EntitySystem {
         acorn.add(zOrder);
 
         engine.addEntity(acorn);
+    }
+
+    public void createBomb(float x, float y) {
+        Entity bomb = engine.createEntity();
+
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+        DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        MovementComponent movement = engine.createComponent(MovementComponent.class);
+        DamageComponent damage = engine.createComponent(DamageComponent.class);
+        ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
+        RotationComponent rotation = engine.createComponent(RotationComponent.class);
+
+        position.x = x;
+        position.y = y;
+
+        dimension.width = 40f;
+        dimension.height = 40f;
+
+        texture.region = atlas.findRegion(RegionNames.BOMB);
+        movement.ySpeed = -160f; // BOMB SPEED
+        damage.damage = 25; // BOMB DAMAGE
+        zOrder.z = 1;
+        rotation.angularSpeed = 180f; // ROTATION SPEED
+
+        bomb.add(position);
+        bomb.add(dimension);
+        bomb.add(texture);
+        bomb.add(movement);
+        bomb.add(damage);
+        bomb.add(zOrder);
+        bomb.add(rotation);
+
+        engine.addEntity(bomb);
     }
 }
