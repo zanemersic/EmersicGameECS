@@ -14,6 +14,7 @@ public class EmersicGame extends Game {
         assetManager = new AssetManager();
 
         assetManager.load(AssetDescriptors.GAMEPLAY_ATLAS);
+        assetManager.load(AssetDescriptors.FONT);
         assetManager.finishLoading();
 
         setScreen(new GameScreen(assetManager));

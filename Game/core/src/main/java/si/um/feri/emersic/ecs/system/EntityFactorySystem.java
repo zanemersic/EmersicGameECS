@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import si.um.feri.emersic.assets.AssetDescriptors;
 import si.um.feri.emersic.assets.RegionNames;
 import si.um.feri.emersic.config.GameConfig;
+import si.um.feri.emersic.ecs.component.CollectibleComponent;
 import si.um.feri.emersic.ecs.component.DimensionComponent;
 import si.um.feri.emersic.ecs.component.InputComponent;
 import si.um.feri.emersic.ecs.component.MovementComponent;
@@ -84,5 +85,36 @@ public class EntityFactorySystem extends EntitySystem {
         background.add(zOrder);
 
         engine.addEntity(background);
+    }
+
+    public void createAcorn(float x, float y) {
+        Entity acorn = engine.createEntity();
+
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+        DimensionComponent dimension = engine.createComponent(DimensionComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        MovementComponent movement = engine.createComponent(MovementComponent.class);
+        CollectibleComponent collectible = engine.createComponent(CollectibleComponent.class);
+        ZOrderComponent zOrder = engine.createComponent(ZOrderComponent.class);
+
+        position.x = x;
+        position.y = y;
+
+        dimension.width = 32f;
+        dimension.height = 32f;
+
+        texture.region = atlas.findRegion(RegionNames.ACORN);
+        movement.ySpeed = -120f;
+        collectible.points = 1;
+        zOrder.z = 1;
+
+        acorn.add(position);
+        acorn.add(dimension);
+        acorn.add(texture);
+        acorn.add(movement);
+        acorn.add(collectible);
+        acorn.add(zOrder);
+
+        engine.addEntity(acorn);
     }
 }
