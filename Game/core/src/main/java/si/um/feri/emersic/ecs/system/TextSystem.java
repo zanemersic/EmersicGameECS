@@ -8,12 +8,16 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import si.um.feri.emersic.assets.AssetDescriptors;
 import si.um.feri.emersic.config.GameConfig;
 import si.um.feri.emersic.ecs.component.GameStateComponent;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import si.um.feri.emersic.ecs.component.PlayerComponent;
 
 public class TextSystem extends EntitySystem {
     private final SpriteBatch batch;
     private final Viewport viewport;
     private final BitmapFont font;
     private final GameStateComponent gameState;
+    private final Family playerFamily = Family.all(PlayerComponent.class).get();
 
     public TextSystem(SpriteBatch batch, Viewport viewport, AssetManager assetManager, GameStateComponent gameState) {
         super(110);
@@ -30,6 +34,17 @@ public class TextSystem extends EntitySystem {
 
         batch.begin();
         font.draw(batch, "Score: " + gameState.score, 15f, GameConfig.WORLD_HEIGHT - 15f);
+
+        for (Entity player : getEngine().getEntitiesFor(playerFamily)) {
+            PlayerComponent playerData = player.getComponent(PlayerComponent.class);
+
+            font.draw(batch, "Health: " + playerData.health, 15f, GameConfig.WORLD_HEIGHT - 40f);
+        }
+
+        if (gameState.gameOver) {
+            font.draw(batch, "GAME OVER", GameConfig.WORLD_WIDTH / 2f - 50f, GameConfig.WORLD_HEIGHT / 2f);
+        }
+
         batch.end();
     }
 
